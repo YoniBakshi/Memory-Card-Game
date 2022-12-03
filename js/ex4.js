@@ -5,7 +5,7 @@
 // the errors messages will be stored here and later displayed to the user
     let errorMessages = []
 // an array of objects {name, reference, description, price}
-    let productsList = []
+    let playersList = [{key:'dff', value: 10}, {key:'', value: 0}, {key:'', value: 0}]
 
 
     /** you need to implement this function - do not change the name of the function
@@ -13,8 +13,8 @@
      * @param product an object, the new product to add (see the code line 61)
      */
     function addProduct(product) {
-        productsList.push(product);
-        console.log(productsList)
+        playersList.push(product);
+        console.log(playersList)
     }
 
     /** you need to implement this function - do not change the name of the function
@@ -32,31 +32,32 @@
      * @returns {boolean} true if the form is valid, false otherwise
      */
     function validateProduct(formInput) {
+        console.log(formInput.playerName)
         let validFrom = true;
-        if (!validatorReference(formInput.reference))
+        if (!validatorName(formInput.playerName))
             validFrom = false;
-        if (!validatorNameAndDescription(formInput.name, 'Name'))
+/*        if (!validatorNameAndDescription(formInput.name, 'Name'))
             validFrom = false;
         if (!validatorNameAndDescription(formInput.description, 'Description'))
             validFrom = false;
         if (!validatorPrice(formInput.price))
-            validFrom = false;
+            validFrom = false;*/
         console.log(errorMessages);
         return validFrom;
     }
 
-    function validatorReference(inpRef) {
-        if (validatorLenAndVal(inpRef.length, 0)) {
+    function validatorName(inpName) {
+        if (validatorLenAndVal(inpName.length, 0)) {
             errorMessages.push("The input field Reference - is empty.");
             return false;
         }
-        if (!validatorLenAndVal(inpRef.length, 21)) {
+        if (!validatorLenAndVal(inpName.length, 12)) {
             errorMessages.push("Input field : Reference - is too long. (Max : 20).");
             return false;
         }
-        if (!validatorLetterOrDigit(inpRef)) {
-            if (inpRef.includes(' '))
-                errorMessages.push("Input " + inpRef + "field must contain a single word.");
+        if (!validatorLetterOrDigit(inpName)) {
+            if (inpName.includes(' '))
+                errorMessages.push("Input " + inpName + "field must contain a single word.");
             else
                 errorMessages.push("Input field : Reference - can contain a-z or 0-9 ONLY.");
             return false;
@@ -120,11 +121,10 @@
      * @param listOfErrors an array of strings containing the error messages
      * @returns {string|string|*} the HTML code to display the errors
      */
-    function convertErrorsToHtml(listOfErrors) {
-        let convertList = `<p class=text>  please correct the following mistake(s): </p>`
-        listOfErrors.forEach((error, index) => {
-            convertList += `<p class=text> ${index + 1}. ${error} </p>`
-        })
+    function convertErrorsToHtml() {
+        let convertList =``
+        for(let i = 2;i<=10;++i)
+            convertList += `<option value=${i}>${i}</option>`;
 
         return convertList;
     }
@@ -137,26 +137,27 @@
      * @param html
      */
     const displayProducts = (html) => {
-        document.getElementById("productsTable").innerHTML = html;
+        document.getElementById("tableScore").innerHTML = html;
+    }
+    const displayProduct = (html) => {
+        document.getElementById("boardOption").innerHTML = html;
     }
 
     function fillTable() {
         let tableProd = `<table class="table">
   <thead>
     <tr>
-      <th scope="col"> Reference </th>
-      <th scope="col"> Name </th>
-      <th scope="col"> Description </th>
-      <th scope="col"> Price </th>
+      <th scope="col"> Rank </th>
+      <th scope="col"> Player </th>
+      <th scope="col"> Score </th>
     </tr>
   </thead>
 <tbody>`
-        productsList.forEach((prod) => {
+        playersList.forEach((player, index) => {
             tableProd += ` <tr>
-     <td>${prod.reference}</td>
-     <td>${prod.name}</td>
-     <td>${prod.description}</td>
-     <td>${prod.price}</td>
+     <td>${index + 1}</td>
+     <td>${player.key}</td>
+     <td>${player.value}</td>
     </tr>`
         })
 
@@ -171,32 +172,36 @@
      */
     document.addEventListener("DOMContentLoaded", () => {
 
-        document.getElementById("messageForm").addEventListener("click", (event) => {
+        document.getElementById("messageForm").addEventListener("submit", (event) => {
             event.preventDefault();
-
 
             errorMessages = [];
             // we build the new product object from the form input:
             let player = {
-                name: document.getElementById("productName").value.trim(),
-                reference: document.getElementById("productRef").value.trim(),
+                playerName: document.getElementById("name").value.trim(),
+                rowBoard: document.getElementById("numberOfRows").value.trim(),
+                colBoard: document.getElementById("numberOfCol").value.trim()
             }
             // we validate the product:
-            if (validateProduct(prod)) {
+            if (validateProduct(player)) {
                 // if the product is valid, we add it to the list of products:
                 document.getElementById("errorMessages").innerHTML = "Product is saved!";
                 // add the product to the list of products and update the HTML table
-                addProduct(prod);
+                addProduct(player);
                 displayProducts(fillTable());
             } else
                 // if the product is not valid, we display the errors:
                 document.getElementById("errorMessages").innerHTML = convertErrorsToHtml(errorMessages);
         });
 
+
+        displayProducts(fillTable());
+        displayProduct(convertErrorsToHtml());
+
         // the sort button handler:
-        document.getElementById("sortByReference").addEventListener("click", (event) => {
+    /*    document.getElementById("sortByReference").addEventListener("click", (event) => {
             sortProductsByReference();
-        })
+        })*/
 
     });
 })();
