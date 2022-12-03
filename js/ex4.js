@@ -33,6 +33,7 @@
      */
     function validateProduct(formInput) {
         console.log(formInput.playerName)
+
         let validFrom = true;
         if (!validatorName(formInput.playerName))
             validFrom = false;
@@ -175,6 +176,7 @@
         document.getElementById("messageForm").addEventListener("submit", (event) => {
             event.preventDefault();
 
+
             errorMessages = [];
             // we build the new product object from the form input:
             let player = {
@@ -182,6 +184,23 @@
                 rowBoard: document.getElementById("numberOfRows").value.trim(),
                 colBoard: document.getElementById("numberOfCol").value.trim()
             }
+
+
+
+            const nameField = document.querySelector('input');
+            nameField.addEventListener('input', () => {
+                nameField.setCustomValidity('');
+                nameField.checkValidity();
+                console.log(nameField.checkValidity());
+
+            });
+
+            nameField.addEventListener('invalid', () => {
+                nameField.setCustomValidity('Please fill in your First Name.');
+            })
+
+
+
             // we validate the product:
             if (validateProduct(player)) {
                 // if the product is valid, we add it to the list of products:
