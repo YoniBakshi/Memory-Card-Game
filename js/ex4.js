@@ -174,10 +174,7 @@
         document.getElementById("messageForm").addEventListener("click", (event) => {
             event.preventDefault();
 
-            let myCollapsible = document.getElementById('myCollapsible')
-            myCollapsible.addEventListener('hidden.bs.collapse', function () {
 
-            })
 
 
             errorMessages = [];
