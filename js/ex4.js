@@ -1,7 +1,5 @@
 (function () {
 
-// A sample array of forbidden words, you modify it. Note that it can also be empty.
-    const forbiddenWords = ["politics", "religion", "cheap", "expensive", "money", "offer"]
 // the errors messages will be stored here and later displayed to the user
     let errorMessages = []
 // an array of objects {name, reference, description, price}
@@ -32,17 +30,9 @@
      * @returns {boolean} true if the form is valid, false otherwise
      */
     function validateProduct(formInput) {
-        console.log(formInput.playerName)
-
         let validFrom = true;
         if (!validatorName(formInput.playerName))
             validFrom = false;
-/*        if (!validatorNameAndDescription(formInput.name, 'Name'))
-            validFrom = false;
-        if (!validatorNameAndDescription(formInput.description, 'Description'))
-            validFrom = false;
-        if (!validatorPrice(formInput.price))
-            validFrom = false;*/
         console.log(errorMessages);
         return validFrom;
     }
@@ -66,44 +56,6 @@
         return true;
     }
 
-    function validatorNameAndDescription(inpNameOrDes, field) {
-        if (validatorLenAndVal(inpNameOrDes.length, 0)) {
-            errorMessages.push("The input field " + field + " - is empty.");
-            return false;
-        }
-        if (!validatorLenAndVal(inpNameOrDes.length, 21)) {      // TODO 50
-            errorMessages.push("Input field : " + field + " - is too long. (Max : 50).");
-            return false;
-        }
-        if (validatorForbiddenWords(inpNameOrDes)) {               // if returns true so it's a bad word
-            errorMessages.push("Input field : " + field + " - contains a forbidden word/s :( .");
-            return false;
-        }
-        return true;
-    }
-
-    function validatorPrice(inpPrice) {
-        if (validatorLenAndVal(inpPrice.length, 0)) {
-            errorMessages.push("The input field Price - is empty.");
-            return false;
-        }
-
-        if (!/^[0-9.]*$/.test(inpPrice)) {
-            errorMessages.push("Input field TODOOOOOOOOO : Price - needs to be a number.");  //TODO
-            return false;
-        }
-
-        if (inpPrice.includes('.') && !validatorLenAndVal(inpPrice.toString().split('.')[1].length, 2)) {
-            errorMessages.push("Input field : Price - " + inpPrice + " has too many decimals. it must have at most 2 decimals.");  //TODO
-            return false;
-        }
-
-        if (validatorLenAndVal(inpPrice, 0)) {
-            errorMessages.push("Input field : Price - " + inpPrice + "must be positive mamash.");  //TODO
-            return false;
-        }
-        return true;
-    }
 
     function validatorLenAndVal(currInp, wanted) {
         return currInp <= wanted;
@@ -111,10 +63,6 @@
 
     function validatorLetterOrDigit(currInp) {
         return /^[A-Za-z0-9]*$/.test(currInp);
-    }
-
-    function validatorForbiddenWords(currInpF) {
-        return forbiddenWords.includes(currInpF);
     }
 
 
@@ -185,20 +133,17 @@
                 colBoard: document.getElementById("numberOfCol").value.trim()
             }
 
+            if(document.getElementById("name").value.length > 10){
+               console.log(document.getElementById("name").value.trim());
 
+                const nameField = document.getElementById("name");
 
-            const nameField = document.querySelector('input');
-            nameField.addEventListener('input', () => {
-                nameField.setCustomValidity('');
-                nameField.checkValidity();
-                console.log(nameField.checkValidity());
-
-            });
-
-            nameField.addEventListener('invalid', () => {
-                nameField.setCustomValidity('Please fill in your First Name.');
-            })
-
+                nameField.addEventListener("input", () => {
+                    nameField.setCustomValidity("sssssssssssssssssssssssssssssss.");
+                    nameField.checkValidity();
+                    console.log(nameField.checkValidity());
+                });
+            }
 
 
             // we validate the product:
