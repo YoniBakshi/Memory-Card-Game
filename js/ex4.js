@@ -92,7 +92,7 @@
         }
 
         if (inpPrice.includes('.') && !validatorLenAndVal(inpPrice.toString().split('.')[1].length, 2)) {
-            errorMessages.push("Input field : Price - " + inpPrice +" has too many decimals. it must have at most 2 decimals.");  //TODO
+            errorMessages.push("Input field : Price - " + inpPrice + " has too many decimals. it must have at most 2 decimals.");  //TODO
             return false;
         }
 
@@ -173,8 +173,6 @@
 
         document.getElementById("messageForm").addEventListener("click", (event) => {
             event.preventDefault();
-
-
 
 
             errorMessages = [];
