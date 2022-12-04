@@ -3,8 +3,7 @@
 // the errors messages will be stored here and later displayed to the user
     let errorMessages = []
 // an array of objects {name, reference, description, price}
-    let playersList = [{key:'dff', value: 10}, {key:'', value: 0}, {key:'', value: 0}]
-
+    let playersList = [{key: 'dff', value: 10}, {key: '', value: 0}, {key: '', value: 0}]
 
     /** you need to implement this function - do not change the name of the function
      * add a product to the productsList and update the HTML displaying the list of products using displayProducts()
@@ -24,7 +23,6 @@
         console.log(productsList)
     }
 
-
     /** you need to implement this function - do not change the name of the function
      * @param formInput an object containing the values of the form fields
      * @returns {boolean} true if the form is valid, false otherwise
@@ -37,28 +35,43 @@
         return validFrom;
     }
 
-    function validatorName(inpName) {
-        if (validatorLenAndVal(inpName.length, 0)) {
-            errorMessages.push("The input field Reference - is empty.");
+    function validatorName() {
+        let errorM = document.getElementById("nameValid");
+        const inpName = document.getElementById("name").value.trim();
+        if (!validatorLenAndVal(inpName.length)){
+            errorM.style.display = "block";
             return false;
         }
-        if (!validatorLenAndVal(inpName.length, 12)) {
-            errorMessages.push("Input field : Reference - is too long. (Max : 20).");
+        else if (inpName.includes(' ')){
+            errorM.style.display = "block";
+            //inpName.setCustomValidity("field must contain a single word.");
             return false;
         }
-        if (!validatorLetterOrDigit(inpName)) {
-            if (inpName.includes(' '))
-                errorMessages.push("Input " + inpName + "field must contain a single word.");
-            else
-                errorMessages.push("Input field : Reference - can contain a-z or 0-9 ONLY.");
-            return false;
+        else{
+            //inpName.setCustomValidity("");
+            errorM.style.display = "none";
+            return true;
         }
-        return true;
+        return false;
     }
 
+    function validatorBoardSize() {
+        let errorM = document.getElementById("boardSizeError");
+        const rows = document.getElementById("numberOfRows").value.trim();
+        const cols = document.getElementById("numberOfCol").value.trim();
+        if ((rows * cols) % 2 === 0){
+            errorM.style.display = "none";
+            return true;
+        }
+        else{
+            errorM.style.display = "block";
+            return false;
+        }
+        return false;
+    }
 
-    function validatorLenAndVal(currInp, wanted) {
-        return currInp <= wanted;
+    function validatorLenAndVal(currInp) {
+        return currInp <= 7 && currInp > 0;
     }
 
     function validatorLetterOrDigit(currInp) {
@@ -70,13 +83,13 @@
      * @param listOfErrors an array of strings containing the error messages
      * @returns {string|string|*} the HTML code to display the errors
      */
-    function convertErrorsToHtml() {
-        let convertList =``
-        for(let i = 2;i<=10;++i)
+/*    function convertErrorsToHtml() {
+        let convertList = ``
+        for (let i = 2; i <= 10; ++i)
             convertList += `<option value=${i}>${i}</option>`;
 
         return convertList;
-    }
+    }*/
 
 
 // you may move but not modify the code below this line
@@ -88,9 +101,9 @@
     const displayProducts = (html) => {
         document.getElementById("tableScore").innerHTML = html;
     }
-    const displayProduct = (html) => {
+/*    const displayProduct = (html) => {
         document.getElementById("boardOption").innerHTML = html;
-    }
+    }*/
 
     function fillTable() {
         let tableProd = `<table class="table">
@@ -114,58 +127,57 @@
                 </table>`
         return tableProd;
     }
+    function PlayGame(){
+        console.log(validatorName()+ " " + validatorBoardSize())
+        if(validatorName() && validatorBoardSize()) {
+            let name = document.getElementById("name").value.trim()
+            let newPlayer = {key: name, value: 0}
+            playersList.push(newPlayer)
+            playersList.forEach((pl) => {
+                console.log(pl.key)
+            })
+            document.getElementById("formPage").style.display = "none";
+        }
 
+    }
 
     /**
      * upon loading the page, we bind handlers to the form and the button
      */
     document.addEventListener("DOMContentLoaded", () => {
 
-        document.getElementById("messageForm").addEventListener("submit", (event) => {
-            event.preventDefault();
+        document.getElementById("messageForm").addEventListener("keyup", (elm) => {
+            validatorName()
+        })
 
+        document.getElementById("messageForm").addEventListener("click", (elm) => {
+            validatorBoardSize();
+        })
 
-            errorMessages = [];
-            // we build the new product object from the form input:
-            let player = {
-                playerName: document.getElementById("name").value.trim(),
-                rowBoard: document.getElementById("numberOfRows").value.trim(),
-                colBoard: document.getElementById("numberOfCol").value.trim()
-            }
+        document.getElementById("Play").addEventListener("click", (elm) => {
+            console.log("play")
+            PlayGame()
+        })
 
-            if(document.getElementById("name").value.length > 10){
-               console.log(document.getElementById("name").value.trim());
-
-                const nameField = document.getElementById("name");
-
-                nameField.addEventListener("input", () => {
-                    nameField.setCustomValidity("sssssssssssssssssssssssssssssss.");
-                    nameField.checkValidity();
-                    console.log(nameField.checkValidity());
-                });
-            }
-
-
-            // we validate the product:
-            if (validateProduct(player)) {
-                // if the product is valid, we add it to the list of products:
-                document.getElementById("errorMessages").innerHTML = "Product is saved!";
-                // add the product to the list of products and update the HTML table
-                addProduct(player);
-                displayProducts(fillTable());
-            } else
-                // if the product is not valid, we display the errors:
-                document.getElementById("errorMessages").innerHTML = convertErrorsToHtml(errorMessages);
-        });
-
+        /*       // we validate the product:
+               if (validateProduct(player)) {
+                   // if the product is valid, we add it to the list of products:
+                   document.getElementById("errorMessages").innerHTML = "Product is saved!";
+                   // add the product to the list of products and update the HTML table
+                   addProduct(player);
+                   displayProducts(fillTable());
+               } else
+                   // if the product is not valid, we display the errors:
+                   document.getElementById("errorMessages").innerHTML = convertErrorsToHtml(errorMessages);
+               //});*/
 
         displayProducts(fillTable());
-        displayProduct(convertErrorsToHtml());
+        //displayProduct(convertErrorsToHtml());
 
         // the sort button handler:
-    /*    document.getElementById("sortByReference").addEventListener("click", (event) => {
-            sortProductsByReference();
-        })*/
+        /*    document.getElementById("sortByReference").addEventListener("click", (event) => {
+                sortProductsByReference();
+            })*/
 
     });
 })();
