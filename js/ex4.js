@@ -107,30 +107,21 @@
     }
 
     function PlayGame() {
-        //console.log(validatorName()+ " " + validatorBoardSize())
         if (validatorName() && validatorBoardSize()) {
             getPlayerName();
             document.getElementById("formPage").style.display = "none";
             document.getElementById("gameBoard").style.display = "block";
             displayProduct(fillTable());
-
             playing = true;
         }
     }
 
     function getPlayerName() {
         let name = document.getElementById("name").value.trim().toLowerCase()
-        for (let k in playersList.keys()) {
-            if (k.toString() === name.toString())
+        for (let k of playersList)
+            if (k.key === name)
                 return;
-        }
-        let newPlayer = {key: name, value: 0}
-        playersList.push(newPlayer)
-        playersList.forEach((pl) => {
-            console.log(pl.key)
-        })
-        console.log(playersList.length)
-
+        playersList.push({key: name, value: 0})
     }
 
     /**
