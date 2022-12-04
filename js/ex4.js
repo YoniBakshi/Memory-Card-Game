@@ -1,18 +1,10 @@
 (function () {
-
+    let playing = false;
 // the errors messages will be stored here and later displayed to the user
     let errorMessages = []
 // an array of objects {name, reference, description, price}
-    let playersList = [{key: 'dff', value: 10}, {key: '', value: 0}, {key: '', value: 0}]
+    let playersList = []
 
-    /** you need to implement this function - do not change the name of the function
-     * add a product to the productsList and update the HTML displaying the list of products using displayProducts()
-     * @param product an object, the new product to add (see the code line 61)
-     */
-    function addProduct(product) {
-        playersList.push(product);
-        console.log(playersList)
-    }
 
     /** you need to implement this function - do not change the name of the function
      * sort the productsList amd update the HTML displaying the list of products using displayProducts()
@@ -23,31 +15,18 @@
         console.log(productsList)
     }
 
-    /** you need to implement this function - do not change the name of the function
-     * @param formInput an object containing the values of the form fields
-     * @returns {boolean} true if the form is valid, false otherwise
-     */
-    function validateProduct(formInput) {
-        let validFrom = true;
-        if (!validatorName(formInput.playerName))
-            validFrom = false;
-        console.log(errorMessages);
-        return validFrom;
-    }
 
     function validatorName() {
         let errorM = document.getElementById("nameValid");
         const inpName = document.getElementById("name").value.trim();
-        if (!validatorLenAndVal(inpName.length)){
+        if (!validatorLenAndVal(inpName.length)) {
             errorM.style.display = "block";
             return false;
-        }
-        else if (inpName.includes(' ')){
+        } else if (inpName.includes(' ')) {
             errorM.style.display = "block";
             //inpName.setCustomValidity("field must contain a single word.");
             return false;
-        }
-        else{
+        } else {
             //inpName.setCustomValidity("");
             errorM.style.display = "none";
             return true;
@@ -59,11 +38,10 @@
         let errorM = document.getElementById("boardSizeError");
         const rows = document.getElementById("numberOfRows").value.trim();
         const cols = document.getElementById("numberOfCol").value.trim();
-        if ((rows * cols) % 2 === 0){
+        if ((rows * cols) % 2 === 0) {
             errorM.style.display = "none";
             return true;
-        }
-        else{
+        } else {
             errorM.style.display = "block";
             return false;
         }
@@ -83,13 +61,13 @@
      * @param listOfErrors an array of strings containing the error messages
      * @returns {string|string|*} the HTML code to display the errors
      */
-/*    function convertErrorsToHtml() {
-        let convertList = ``
-        for (let i = 2; i <= 10; ++i)
-            convertList += `<option value=${i}>${i}</option>`;
+    /*    function convertErrorsToHtml() {
+            let convertList = ``
+            for (let i = 2; i <= 10; ++i)
+                convertList += `<option value=${i}>${i}</option>`;
 
-        return convertList;
-    }*/
+            return convertList;
+        }*/
 
 
 // you may move but not modify the code below this line
@@ -101,9 +79,9 @@
     const displayProducts = (html) => {
         document.getElementById("tableScore").innerHTML = html;
     }
-/*    const displayProduct = (html) => {
-        document.getElementById("boardOption").innerHTML = html;
-    }*/
+    const displayProduct = (html) => {
+        document.getElementById("gameTableImg").innerHTML = html;
+    }
 
     function fillTable() {
         let tableProd = `<table class="table">
@@ -127,17 +105,31 @@
                 </table>`
         return tableProd;
     }
-    function PlayGame(){
-        console.log(validatorName()+ " " + validatorBoardSize())
-        if(validatorName() && validatorBoardSize()) {
-            let name = document.getElementById("name").value.trim()
-            let newPlayer = {key: name, value: 0}
-            playersList.push(newPlayer)
-            playersList.forEach((pl) => {
-                console.log(pl.key)
-            })
+
+    function PlayGame() {
+        //console.log(validatorName()+ " " + validatorBoardSize())
+        if (validatorName() && validatorBoardSize()) {
+            getPlayerName();
             document.getElementById("formPage").style.display = "none";
+            document.getElementById("gameBoard").style.display = "block";
+            displayProduct(fillTable());
+
+            playing = true;
         }
+    }
+
+    function getPlayerName() {
+        let name = document.getElementById("name").value.trim().toLowerCase()
+        for (let k in playersList.keys()) {
+            if (k.toString() === name.toString())
+                return;
+        }
+        let newPlayer = {key: name, value: 0}
+        playersList.push(newPlayer)
+        playersList.forEach((pl) => {
+            console.log(pl.key)
+        })
+        console.log(playersList.length)
 
     }
 
@@ -145,6 +137,9 @@
      * upon loading the page, we bind handlers to the form and the button
      */
     document.addEventListener("DOMContentLoaded", () => {
+
+        if (!playing)
+            document.getElementById("gameBoard").style.display = "none"
 
         document.getElementById("messageForm").addEventListener("keyup", (elm) => {
             validatorName()
@@ -155,8 +150,12 @@
         })
 
         document.getElementById("Play").addEventListener("click", (elm) => {
-            console.log("play")
             PlayGame()
+        })
+        document.getElementById("Back").addEventListener("click", (elm) => {
+            document.getElementById("gameBoard").style.display = "none";
+            document.getElementById("formPage").style.display = "block";
+
         })
 
         /*       // we validate the product:
