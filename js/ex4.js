@@ -146,7 +146,7 @@
             validatorBoardSize();
         })
 
-        document.getElementById("Play").addEventListener("click", (elm) => {
+        document.getElementById("Play").addEventListener("submit", (elm) => {
             PlayGame()
         })
         document.getElementById("Back").addEventListener("click", (elm) => {
