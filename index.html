@@ -25,14 +25,12 @@
                         <input type="text" class="form-control" id="name" placeholder="Enter Name">
                     </p>
                 </div>
-                <div id="nameValid">
+<!--                <div id="nameValid">
                     <p style="color:red;">Invalid input</p>
-                </div>
+                </div>-->
             </div>
             <p>
-                <button type="button" class="btn btn-primary me-2" id="Play" value="Play">
-                    Play
-                </button>
+                <input type="submit" class="btn btn-primary me-2" id="Play" value="Play">
                 <button class="btn btn-primary me-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#Settings"
                         aria-expanded="false" aria-controls="Settings">
@@ -109,13 +107,15 @@
             </div>
         </form>
     </div>
-    <div id="gameBoard">
-        <div id="gameTableImg">
-        </div>
-        <button type="button" class="btn btn-primary me-2" id="Back" value="Play">
+    <list id="gameBoard">
+
+    </list>
+    <div class="row">
+        <button type="button" class="btn btn-primary me-2" id="Back" value="Play" hidden="hidden">
             Back
         </button>
     </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"

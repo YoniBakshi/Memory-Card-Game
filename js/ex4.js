@@ -17,21 +17,24 @@
 
 
     function validatorName() {
-        let errorM = document.getElementById("nameValid");
+        const errorM = document.getElementById("name");
         const inpName = document.getElementById("name").value.trim();
         if (!validatorLenAndVal(inpName.length)) {
-            errorM.style.display = "block";
+            //errorM.style.display = "block";
+            //document.querySelector("#Play").disabled = true;
+            errorM.setCustomValidity("field less than 12.");
             return false;
         } else if (inpName.includes(' ')) {
-            errorM.style.display = "block";
-            //inpName.setCustomValidity("field must contain a single word.");
+            //errorM.style.display = "block";
+            //document.querySelector("#Play").disabled = true;
+            errorM.setCustomValidity("field must contain a single word.");
             return false;
         } else {
-            //inpName.setCustomValidity("");
-            errorM.style.display = "none";
+            errorM.setCustomValidity("");
+            //document.querySelector("#Play").disabled = false;
+            //errorM.style.display = "none";
             return true;
         }
-        return false;
     }
 
     function validatorBoardSize() {
@@ -40,12 +43,13 @@
         const cols = document.getElementById("numberOfCol").value.trim();
         if ((rows * cols) % 2 === 0) {
             errorM.style.display = "none";
+            document.querySelector("#Play").disabled = false;
             return true;
         } else {
             errorM.style.display = "block";
+            document.querySelector("#Play").disabled = true;
             return false;
         }
-        return false;
     }
 
     function validatorLenAndVal(currInp) {
@@ -79,9 +83,10 @@
     const displayProducts = (html) => {
         document.getElementById("tableScore").innerHTML = html;
     }
-    const displayProduct = (html) => {
+ /*   const displayProduct = (html) => {
         document.getElementById("gameTableImg").innerHTML = html;
     }
+*/
 
     function fillTable() {
         let tableProd = `<table class="table">
@@ -111,7 +116,7 @@
             getPlayerName();
             document.getElementById("formPage").style.display = "none";
             document.getElementById("gameBoard").style.display = "block";
-            displayProduct(fillTable());
+            //displayProduct(fillTable());
             playing = true;
         }
     }
@@ -131,6 +136,7 @@
 
         if (!playing)
             document.getElementById("gameBoard").style.display = "none"
+
 
         document.getElementById("messageForm").addEventListener("keyup", (elm) => {
             validatorName()
