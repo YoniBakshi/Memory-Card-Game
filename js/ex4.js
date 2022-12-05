@@ -36,11 +36,11 @@
         const rows = document.getElementById("numberOfRows").value.trim();
         const cols = document.getElementById("numberOfCol").value.trim();
         if ((rows * cols) % 2 === 0) {
-            errorM.style.display = "none";
+            errorM.classList.add('d-none');
             document.querySelector("#Play").disabled = false;
             return true;
         } else {
-            errorM.style.display = "block";
+            errorM.classList.remove('d-none');
             document.querySelector("#Play").disabled = true;
             return false;
         }
@@ -116,7 +116,7 @@
         }
     }
 
-    function getPlayerName() {
+    const getPlayerName = () => {
         let name = document.getElementById("name").value.trim().toLowerCase()
         for (let k of playersList)
             if (k.key === name)
