@@ -20,19 +20,13 @@
         const errorM = document.getElementById("name");
         const inpName = document.getElementById("name").value.trim();
         if (!validatorLenAndVal(inpName.length)) {
-            //errorM.style.display = "block";
-            //document.querySelector("#Play").disabled = true;
             errorM.setCustomValidity("field less than 12.");
             return false;
         } else if (inpName.includes(' ')) {
-            //errorM.style.display = "block";
-            //document.querySelector("#Play").disabled = true;
             errorM.setCustomValidity("field must contain a single word.");
             return false;
         } else {
             errorM.setCustomValidity("");
-            //document.querySelector("#Play").disabled = false;
-            //errorM.style.display = "none";
             return true;
         }
     }
@@ -53,7 +47,7 @@
     }
 
     function validatorLenAndVal(currInp) {
-        return currInp <= 7 && currInp > 0;
+        return currInp <= 7 ;
     }
 
     function validatorLetterOrDigit(currInp) {
@@ -83,10 +77,9 @@
     const displayProducts = (html) => {
         document.getElementById("tableScore").innerHTML = html;
     }
- /*   const displayProduct = (html) => {
+    const displayProduct = (html) => {
         document.getElementById("gameTableImg").innerHTML = html;
     }
-*/
 
     function fillTable() {
         let tableProd = `<table class="table">
@@ -114,9 +107,11 @@
     function PlayGame() {
         if (validatorName() && validatorBoardSize()) {
             getPlayerName();
-            document.getElementById("formPage").style.display = "none";
-            document.getElementById("gameBoard").style.display = "block";
-            //displayProduct(fillTable());
+            console.log("fvfvvffvfvfvvfvf")
+            document.getElementById("formPage").classList.add('d-none')
+            document.getElementById("gameBoard").classList.remove('d-none');
+            displayProducts(fillTable());
+            displayProduct(fillTable());
             playing = true;
         }
     }
@@ -134,8 +129,10 @@
      */
     document.addEventListener("DOMContentLoaded", () => {
 
+/*
         if (!playing)
-            document.getElementById("gameBoard").style.display = "none"
+             document.getElementById("gameBoard").style.display = "none"
+*/
 
 
         document.getElementById("messageForm").addEventListener("keyup", (elm) => {
@@ -146,12 +143,13 @@
             validatorBoardSize();
         })
 
-        document.getElementById("Play").addEventListener("submit", (elm) => {
-            PlayGame()
+        document.getElementById("messageForm").addEventListener("submit", (elm) => {
+           elm.preventDefault();
+           PlayGame()
         })
         document.getElementById("Back").addEventListener("click", (elm) => {
-            document.getElementById("gameBoard").style.display = "none";
-            document.getElementById("formPage").style.display = "block";
+            document.getElementById("formPage").classList.remove('d-none')
+            document.getElementById("gameBoard").classList.add('d-none');
 
         })
 
@@ -167,7 +165,7 @@
                    document.getElementById("errorMessages").innerHTML = convertErrorsToHtml(errorMessages);
                //});*/
 
-        displayProducts(fillTable());
+
         //displayProduct(convertErrorsToHtml());
 
         // the sort button handler:

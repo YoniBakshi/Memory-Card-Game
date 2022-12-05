@@ -18,11 +18,11 @@
     </div>
 
     <div id="formPage">
-        <form id="messageForm">
+        <form id="messageForm" name="myForm">
             <div class="row">
                 <div class="col-12 col-md-6 col-xl-6">
                     <p><label for="name" class="form-label"> Your Name : </label>
-                        <input type="text" class="form-control" id="name" placeholder="Enter Name">
+                        <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
                     </p>
                 </div>
  <!--               <div id="nameValid">
@@ -107,10 +107,10 @@
             </div>
         </form>
     </div>
-    <div id="gameBoard">
+    <div id="gameBoard" class="d-none">
         <div id="gameTableImg">
         </div>
-        <button type="button" class="btn btn-primary me-2" id="Back" value="Play">
+        <button type="button" class="btn btn-primary me-2" id="Back">
             Back
         </button>
     </div>
