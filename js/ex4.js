@@ -1,11 +1,58 @@
 (function () {
     let playing = false;
 // the errors messages will be stored here and later displayed to the user
-    let errorMessages = []
+    let gameImg = ["0.jpg", "1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg",
+        "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg"]
 // an array of objects {name, reference, description, price}
     let playersList = []
 
+    const memoryCardGame = function () {
+        let boardCol
+        let boardRow
+        function initB(){
+            boardCol = document.getElementById("numberOfCol").value
+            boardRow = document.getElementById("numberOfRows").value
+        }
+        function getboardSize() {
+            return {
+                "row": boardRow,
+                "col": boardCol,
+                "mul": (boardRow * boardCol)
+            };
+        }
+        return {
+            init : initB,
+            boardSize: getboardSize
+        }
+    }();
 
+    const pickRandom = (array, items) => {
+        const clonedArray = [...array]
+        const randomPicks = []
+
+        for (let index = 0; index < items; index++) {
+            const randomIndex = Math.floor(Math.random() * clonedArray.length)
+
+            randomPicks.push(clonedArray[randomIndex])
+            clonedArray.splice(randomIndex, 1)
+        }
+
+        return randomPicks
+    }
+
+    const shuffle = array => {
+        const clonedArray = [...array]
+
+        for (let index = clonedArray.length - 1; index > 0; index--) {
+            const randomIndex = Math.floor(Math.random() * (index + 1))
+            const original = clonedArray[index]
+
+            clonedArray[index] = clonedArray[randomIndex]
+            clonedArray[randomIndex] = original
+        }
+
+        return clonedArray
+    }
     /** you need to implement this function - do not change the name of the function
      * sort the productsList amd update the HTML displaying the list of products using displayProducts()
      */
@@ -33,9 +80,10 @@
 
     function validatorBoardSize() {
         let errorM = document.getElementById("boardSizeError");
-        const rows = document.getElementById("numberOfRows").value.trim();
-        const cols = document.getElementById("numberOfCol").value.trim();
-        if ((rows * cols) % 2 === 0) {
+        /*const rows = document.getElementById("numberOfRows").value.trim();
+        const cols = document.getElementById("numberOfCol").value.trim();*/
+
+        if (memoryCardGame.boardSize()["mul"] % 2 === 0) {
             errorM.classList.add('d-none');
             document.querySelector("#Play").disabled = false;
             return true;
@@ -104,14 +152,35 @@
         return tableProd;
     }
 
-    function PlayGame() {
+    const creatGameTable = () => {
+/*        const rows = document.getElementById("numberOfRows").value.trim();
+        const cols = document.getElementById("numberOfCol").value.trim();*/
+        let tableProd = document.createElement("table");
+        tableProd.classList.add("mx-auto")
+        let id = 0;
+        for(let i =0; i<memoryCardGame.boardSize()["row"]; ++i){
+            const row = document.createElement("tr")
+            for(let j = 0; j < memoryCardGame.boardSize()["col"];++j){
+                const col = document.createElement("td")
+                const img = document.createElement("img")
+                img.src = "./images/card.jpg"
+                img.id = id++
+                img.classList.add("img-fluid")
+                col.appendChild(img);
+                row.appendChild(col);
+            }
+            tableProd.appendChild(row);
+        }
+        document.getElementById("gameTableImg").appendChild(tableProd)
+    }
+
+    const playGame = () => {
         if (validatorName() && validatorBoardSize()) {
             getPlayerName();
-            console.log("fvfvvffvfvfvvfvf")
             document.getElementById("formPage").classList.add('d-none')
             document.getElementById("gameBoard").classList.remove('d-none');
             displayProducts(fillTable());
-            displayProduct(fillTable());
+            creatGameTable()
             playing = true;
         }
     }
@@ -129,27 +198,24 @@
      */
     document.addEventListener("DOMContentLoaded", () => {
 
-/*
-        if (!playing)
-             document.getElementById("gameBoard").style.display = "none"
-*/
-
-
         document.getElementById("messageForm").addEventListener("keyup", (elm) => {
+            memoryCardGame.init()
             validatorName()
         })
 
         document.getElementById("messageForm").addEventListener("click", (elm) => {
+            memoryCardGame.init()
             validatorBoardSize();
         })
 
         document.getElementById("messageForm").addEventListener("submit", (elm) => {
            elm.preventDefault();
-           PlayGame()
+           playGame()
         })
         document.getElementById("Back").addEventListener("click", (elm) => {
             document.getElementById("formPage").classList.remove('d-none')
             document.getElementById("gameBoard").classList.add('d-none');
+            document.getElementById("gameTableImg").innerHTML = "";
 
         })
 
@@ -164,10 +230,7 @@
                    // if the product is not valid, we display the errors:
                    document.getElementById("errorMessages").innerHTML = convertErrorsToHtml(errorMessages);
                //});*/
-
-
         //displayProduct(convertErrorsToHtml());
-
         // the sort button handler:
         /*    document.getElementById("sortByReference").addEventListener("click", (event) => {
                 sortProductsByReference();
