@@ -10,26 +10,38 @@
         let boardCol
         let boardRow
         let randomImgArr
-        function initB(){
+        let flipped = []
+
+        function initB() {
             boardCol = document.getElementById("numberOfCol").value
             boardRow = document.getElementById("numberOfRows").value
             randomImgArr = []
+            flipped = []
         }
+
         function getboardInfo() {
             return {
                 "row": boardRow,
                 "col": boardCol,
                 "mul": (boardRow * boardCol),
-                "rand": randomImgArr
+                "rand": randomImgArr,
+                "flippedCard": flipped
             };
         }
-        function setRandomImg(arr){
+
+        function setRandomImg(arr) {
             randomImgArr = arr;
         }
+
+        function setflipped() {
+            flipped = [];
+        }
+
         return {
-            init : initB,
+            init: initB,
             boardSize: getboardInfo,
-            setRandImg: setRandomImg
+            setRandImg: setRandomImg,
+            setFlip: setflipped
         }
     }();
 
@@ -63,6 +75,7 @@
 
         return clonedArray
     }
+
     /** you need to implement this function - do not change the name of the function
      * sort the productsList amd update the HTML displaying the list of products using displayProducts()
      */
@@ -101,7 +114,7 @@
     }
 
     function validatorLenAndVal(currInp) {
-        return currInp <= 7 ;
+        return currInp <= 7;
     }
 
     function validatorLetterOrDigit(currInp) {
@@ -162,14 +175,15 @@
         let tableProd = document.createElement("table");
         tableProd.classList.add("mx-auto")
         let id = 0;
-        for(let i =0; i<memoryCardGame.boardSize()["row"]; ++i){
+        for (let i = 0; i < memoryCardGame.boardSize()["row"]; ++i) {
             const row = document.createElement("tr")
-            for(let j = 0; j < memoryCardGame.boardSize()["col"];++j){
+            for (let j = 0; j < memoryCardGame.boardSize()["col"]; ++j) {
                 const col = document.createElement("td")
                 const img = document.createElement("img")
                 img.src = "./images/card.jpg"
                 img.id = id++
-               // img.addEventListener('click')
+                img.addEventListener('click', () => {
+                })
                 //img.classList.add("img-fluid")
                 col.appendChild(img);
                 row.appendChild(col);
@@ -177,7 +191,6 @@
             tableProd.appendChild(row);
         }
         document.getElementById("gameTableImg").appendChild(tableProd)
-        //tableProd.addEventListener('click',)
     }
 
     const playGame = () => {
@@ -187,8 +200,8 @@
             document.getElementById("gameBoard").classList.remove('d-none');
             displayProducts(fillTable());
             creatGameTable()
-            memoryCardGame.setRandImg(pickRandom(gameImg))
-            console.log(shuffle(memoryCardGame.boardSize()["rand"]))
+            memoryCardGame.setRandImg(shuffle(pickRandom(gameImg)))
+            //console.log(shuffle(memoryCardGame.boardSize()["rand"]))
             playing = true;
         }
     }
@@ -215,14 +228,35 @@
             memoryCardGame.init()
             validatorBoardSize();
         })
-
+        //let fliped = []
         document.getElementById("gameTableImg").addEventListener("click", (elm) => {
-            console.log(elm.target.id)
+            console.log(memoryCardGame.boardSize()["flippedCard"] + "   11111111111")
+            if ((memoryCardGame.boardSize()["flippedCard"].length < 2) && elm.target.src.includes(`/images/card.jpg`)) {//&& elm.target.src.includes(`/images/card.jpg`)
+                elm.target.src = `./images/${memoryCardGame.boardSize()["rand"][elm.target.id]}`
+                memoryCardGame.boardSize()["flippedCard"].push(elm.target)
+                console.log(memoryCardGame.boardSize()["flippedCard"] + "   22222222222")
+            }
+            if (memoryCardGame.boardSize()["flippedCard"].length === 2 && !elm.target.src.includes(`/images/card.jpg`)) {
+                if (memoryCardGame.boardSize()["flippedCard"][0].src === memoryCardGame.boardSize()["flippedCard"][1].src) {
+                    memoryCardGame.setFlip()
+                    console.log(memoryCardGame.boardSize()["flippedCard"] + "   3333333333")
+                } else {
+                    setTimeout(() => {
+                        console.log(memoryCardGame.boardSize()["flippedCard"] + "hhhhhhhhhh")
+                        memoryCardGame.boardSize()["flippedCard"][0].src = `./images/card.jpg`
+                        memoryCardGame.boardSize()["flippedCard"][1].src = `./images/card.jpg`
+                        memoryCardGame.setFlip()
+                        console.log(memoryCardGame.boardSize()["flippedCard"] + "   4444444444444444")
+
+                    }, 2000)
+                }
+            }
+            console.log(memoryCardGame.boardSize()["flippedCard"] + "   5555555555555")
 
         })
 
         document.getElementById("messageForm").addEventListener("submit", (elm) => {
-           elm.preventDefault();
+            elm.preventDefault();
             playGame()
         })
         document.getElementById("Back").addEventListener("click", (elm) => {
