@@ -9,38 +9,48 @@
     const memoryCardGame = function () {
         let boardCol
         let boardRow
+        let randomImgArr
         function initB(){
             boardCol = document.getElementById("numberOfCol").value
             boardRow = document.getElementById("numberOfRows").value
+            randomImgArr = []
         }
-        function getboardSize() {
+        function getboardInfo() {
             return {
                 "row": boardRow,
                 "col": boardCol,
-                "mul": (boardRow * boardCol)
+                "mul": (boardRow * boardCol),
+                "rand": randomImgArr
             };
+        }
+        function setRandomImg(arr){
+            randomImgArr = arr;
         }
         return {
             init : initB,
-            boardSize: getboardSize
+            boardSize: getboardInfo,
+            setRandImg: setRandomImg
         }
     }();
 
-    const pickRandom = (array, items) => {
+    const pickRandom = (array) => {
         const clonedArray = [...array]
         const randomPicks = []
 
-        for (let index = 0; index < items; index++) {
+        for (let index = 0; index < memoryCardGame.boardSize()["mul"] / 2; index++) {
             const randomIndex = Math.floor(Math.random() * clonedArray.length)
 
             randomPicks.push(clonedArray[randomIndex])
             clonedArray.splice(randomIndex, 1)
         }
+        //const andomPicks = randomPicks.concat(randomPicks)
 
-        return randomPicks
+
+        //console.log(andomPicks)
+        return randomPicks.concat(randomPicks)
     }
 
-    const shuffle = array => {
+    const shuffle = (array) => {
         const clonedArray = [...array]
 
         for (let index = clonedArray.length - 1; index > 0; index--) {
@@ -65,11 +75,10 @@
 
     function validatorName() {
         const errorM = document.getElementById("name");
-        const inpName = document.getElementById("name").value.trim();
-        if (!validatorLenAndVal(inpName.length)) {
+        if (!validatorLenAndVal(errorM.value.trim().length)) {
             errorM.setCustomValidity("field less than 12.");
             return false;
-        } else if (inpName.includes(' ')) {
+        } else if (errorM.value.trim().includes(' ')) {
             errorM.setCustomValidity("field must contain a single word.");
             return false;
         } else {
@@ -80,9 +89,6 @@
 
     function validatorBoardSize() {
         let errorM = document.getElementById("boardSizeError");
-        /*const rows = document.getElementById("numberOfRows").value.trim();
-        const cols = document.getElementById("numberOfCol").value.trim();*/
-
         if (memoryCardGame.boardSize()["mul"] % 2 === 0) {
             errorM.classList.add('d-none');
             document.querySelector("#Play").disabled = false;
@@ -153,8 +159,6 @@
     }
 
     const creatGameTable = () => {
-/*        const rows = document.getElementById("numberOfRows").value.trim();
-        const cols = document.getElementById("numberOfCol").value.trim();*/
         let tableProd = document.createElement("table");
         tableProd.classList.add("mx-auto")
         let id = 0;
@@ -165,13 +169,15 @@
                 const img = document.createElement("img")
                 img.src = "./images/card.jpg"
                 img.id = id++
-                img.classList.add("img-fluid")
+               // img.addEventListener('click')
+                //img.classList.add("img-fluid")
                 col.appendChild(img);
                 row.appendChild(col);
             }
             tableProd.appendChild(row);
         }
         document.getElementById("gameTableImg").appendChild(tableProd)
+        //tableProd.addEventListener('click',)
     }
 
     const playGame = () => {
@@ -181,6 +187,8 @@
             document.getElementById("gameBoard").classList.remove('d-none');
             displayProducts(fillTable());
             creatGameTable()
+            memoryCardGame.setRandImg(pickRandom(gameImg))
+            console.log(shuffle(memoryCardGame.boardSize()["rand"]))
             playing = true;
         }
     }
@@ -208,15 +216,19 @@
             validatorBoardSize();
         })
 
+        document.getElementById("gameTableImg").addEventListener("click", (elm) => {
+            console.log(elm.target.id)
+
+        })
+
         document.getElementById("messageForm").addEventListener("submit", (elm) => {
            elm.preventDefault();
-           playGame()
+            playGame()
         })
         document.getElementById("Back").addEventListener("click", (elm) => {
             document.getElementById("formPage").classList.remove('d-none')
             document.getElementById("gameBoard").classList.add('d-none');
             document.getElementById("gameTableImg").innerHTML = "";
-
         })
 
         /*       // we validate the product:
