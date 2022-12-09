@@ -1,5 +1,7 @@
-(function () {
+"use strict";
 
+(function () {
+    // Array contains pictures for the game - randomize each game
     let gameImg = ["0.jpg", "1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg",
         "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg"]
 
@@ -13,6 +15,7 @@
             name = document.getElementById("name").value.trim();
         }
 
+        // Dictionary of current player
         function getPlayerData() {
             return {
                 "name": name,
@@ -33,23 +36,20 @@
             initPlayer: initPlayerData,
             getPlayers: getPlayerData,
             clicks: setClicks,
-            pairedFlipped: setPairsCounter,
+            pairedFlipped: setPairsCounter
         }
     }();
 
     const memoryCardGame = function () {
-        let boardCol
-        let boardRow
-        let randomImgArr
-        let flippedArr
+        let boardCol, boardRow, randomImgArr, flippedArr
 
         function initBoard() {
-            boardCol = document.getElementById("numberOfCol").value
-            boardRow = document.getElementById("numberOfRows").value
-            randomImgArr = []
-            flippedArr = []
+            boardCol = document.getElementById("numberOfCol").value;
+            boardRow = document.getElementById("numberOfRows").value;
+            randomImgArr = flippedArr = [];
         }
 
+        // Dictionary of board info
         function getBoardInfo() {
             return {
                 "row": boardRow,
@@ -76,26 +76,39 @@
         }
     }();
 
-    const pickRandom = (array) => {
-        const clonedArray = [...array]
-        const randomPicks = []
-
-        for (let i = 0; i < memoryCardGame.board()["mul"] / 2; ++i) {
-            const randomIndex = Math.floor(Math.random() * clonedArray.length)
-            randomPicks.push(clonedArray[randomIndex])
-            clonedArray.splice(randomIndex, 1)
+    function convertOptionsToHtml() {
+        let convertList = ``
+        for (let i = 2; i <= 5; ++i){
+            convertList += `<option value=${i}>${i}</option>`;
+            if(i === 4)
+                convertList += `<option value=${i} selected>${i}</option>`;
         }
-        return randomPicks.concat(randomPicks)
+        document.getElementById("numberOfRows").innerHTML = convertList
+        document.getElementById("numberOfCol").innerHTML = convertList
     }
 
+    // Pick a random pictures from "gameImg" for the current game cards
+    const randomizeCards = (array) => {
+        const clonedArray = [...array]
+        const randomCards = [];
+
+        for (let i = 0; i < memoryCardGame.board().mul / 2; ++i) {
+            const randomizeI = Math.floor(Math.random() * clonedArray.length);
+            randomCards.push(clonedArray[randomizeI]);
+            clonedArray.splice(randomizeI, 1);
+        }
+        return randomCards.concat(randomCards);
+    }
+
+    // Shuffle the order of cards board game
     const shuffle = (array) => {
         const clonedArray = [...array]
 
-        for (let index = clonedArray.length - 1; index > 0; index--) {
-            const randomIndex = Math.floor(Math.random() * (index + 1));
-            const original = clonedArray[index];
-            clonedArray[index] = clonedArray[randomIndex]
-            clonedArray[randomIndex] = original
+        for (let i = clonedArray.length - 1; i > 0; --i) {
+            const randomizeI = Math.floor(Math.random() * (i + 1));
+            const original = clonedArray[i];
+            clonedArray[i] = clonedArray[randomizeI];
+            clonedArray[randomizeI] = original;
         }
         return clonedArray;
     }
@@ -124,12 +137,12 @@
         }
     }
 
-    const displayElems = (html) => {
+    const convertTableToHtml = (html) => {
         document.getElementById("tableScore").innerHTML = html;
     }
 
     function fillRankedTable() {
-        let tableProd = `<table class="table">
+        let tableProd = `<table class = "table">
   <thead>
     <tr>
       <th scope="col"> Rank </th>
@@ -160,7 +173,7 @@
             for (let j = 0; j < memoryCardGame.board()["col"]; ++j) {
                 const col = document.createElement("td")
                 const img = document.createElement("img")
-                img.src = "./images/card.jpg"
+                img.src = "./images/unflipped.jpg"
                 img.id = id++
                 img.classList.add("img-fluid")
                 img.addEventListener('click', flipCardByClick)
@@ -188,7 +201,7 @@
                 || elm.target.src.includes(memoryCardGame.board().flippedCard[1].src)) {
                 setTimeout(() => {
                     memoryCardGame.board().flippedCard.forEach((card) => {
-                        card.src = `./images/card.jpg`;
+                        card.src = `./images/unflipped.jpg`;
                         card.addEventListener('click', flipCardByClick)
                     })
                     memoryCardGame.setFlip()
@@ -201,17 +214,18 @@
     const playGame = () => {
         if (validatorName() && validatorBoardSize()) {
             gamePlayData.initPlayer()
-            document.getElementById("formPage").classList.add('d-none')
+            document.getElementById("formPage").classList.add('d-none');
             document.getElementById("gameBoard").classList.remove('d-none');
             createGameTable()
-            memoryCardGame.setRandImg(shuffle(pickRandom(gameImg)))
+            memoryCardGame.setRandImg(shuffle(randomizeCards(gameImg)))
         }
     }
-        const calculateScore = () => {
-            return memoryCardGame.board().mul * 100 +
-                (2 / document.getElementById("timer").value) -
-                gamePlayData.getPlayers().clickCounter
-        }
+
+    const calculateScore = () => {
+        return (memoryCardGame.board().mul * 100 +
+            (2 / document.getElementById("timer").value) -
+            gamePlayData.getPlayers().clickCounter).toFixed(3);
+    }
 
     const updateRankedList = () => {
         if (gamePlayData.getPlayers().pairedCounter === memoryCardGame.board().mul) {
@@ -235,7 +249,7 @@
     }
 
     const endScreen = () => {
-        displayElems(fillRankedTable());
+        convertTableToHtml(fillRankedTable());
         document.getElementById("gameTableImg").innerHTML =
             ` <div class = "p-2 mb-3 bg-primary rounded-3">                
                             <h1 class = "text-center display-5 fw-bold"> your score is : ${calculateScore()} </h1>
@@ -246,6 +260,7 @@
      * upon loading the page, we bind handlers to the form and the button
      */
     document.addEventListener("DOMContentLoaded", () => {
+        convertOptionsToHtml();
 
         document.getElementById("messageForm").addEventListener("keyup", () => {
             memoryCardGame.init()
@@ -266,6 +281,7 @@
             document.getElementById("formPage").classList.remove('d-none')
             document.getElementById("gameBoard").classList.add('d-none');
             document.getElementById("gameTableImg").innerHTML = "";
+            document.getElementById("messageForm").reset();
         })
 
     });
