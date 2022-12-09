@@ -1,31 +1,62 @@
 (function () {
-    let playing = false;
-// the errors messages will be stored here and later displayed to the user
+
     let gameImg = ["0.jpg", "1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg",
         "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg"]
-// an array of objects {name, reference, description, price}
-    let playersList = []
+
+    let rankedListArr = []
+
+    const gamePlayData = function () {
+        let clickCounter, pairedCounter, name;
+
+        function initPlayerData() {
+            clickCounter = pairedCounter = 0;
+            name = document.getElementById("name").value.trim();
+        }
+
+        function getPlayerData() {
+            return {
+                "name": name,
+                "clickCounter": clickCounter,
+                "pairedCounter": pairedCounter
+            }
+        }
+
+        function setClicks() {
+            ++clickCounter;
+        }
+
+        function setPairsCounter() {
+            pairedCounter += 2;
+        }
+
+        return {
+            initPlayer: initPlayerData,
+            getPlayers: getPlayerData,
+            clicks: setClicks,
+            pairedFlipped: setPairsCounter,
+        }
+    }();
 
     const memoryCardGame = function () {
         let boardCol
         let boardRow
         let randomImgArr
-        let flipped = []
+        let flippedArr
 
-        function initB() {
+        function initBoard() {
             boardCol = document.getElementById("numberOfCol").value
             boardRow = document.getElementById("numberOfRows").value
             randomImgArr = []
-            flipped = []
+            flippedArr = []
         }
 
-        function getboardInfo() {
+        function getBoardInfo() {
             return {
                 "row": boardRow,
                 "col": boardCol,
                 "mul": (boardRow * boardCol),
                 "rand": randomImgArr,
-                "flippedCard": flipped
+                "flippedCard": flippedArr
             };
         }
 
@@ -33,15 +64,15 @@
             randomImgArr = arr;
         }
 
-        function setflipped() {
-            flipped = [];
+        function setFlipped() {
+            flippedArr = [];
         }
 
         return {
-            init: initB,
-            boardSize: getboardInfo,
+            init: initBoard,
+            board: getBoardInfo,
             setRandImg: setRandomImg,
-            setFlip: setflipped
+            setFlip: setFlipped
         }
     }();
 
@@ -49,16 +80,11 @@
         const clonedArray = [...array]
         const randomPicks = []
 
-        for (let index = 0; index < memoryCardGame.boardSize()["mul"] / 2; index++) {
+        for (let i = 0; i < memoryCardGame.board()["mul"] / 2; ++i) {
             const randomIndex = Math.floor(Math.random() * clonedArray.length)
-
             randomPicks.push(clonedArray[randomIndex])
             clonedArray.splice(randomIndex, 1)
         }
-        //const andomPicks = randomPicks.concat(randomPicks)
-
-
-        //console.log(andomPicks)
         return randomPicks.concat(randomPicks)
     }
 
@@ -66,33 +92,18 @@
         const clonedArray = [...array]
 
         for (let index = clonedArray.length - 1; index > 0; index--) {
-            const randomIndex = Math.floor(Math.random() * (index + 1))
-            const original = clonedArray[index]
-
+            const randomIndex = Math.floor(Math.random() * (index + 1));
+            const original = clonedArray[index];
             clonedArray[index] = clonedArray[randomIndex]
             clonedArray[randomIndex] = original
         }
-
-        return clonedArray
+        return clonedArray;
     }
-
-    /** you need to implement this function - do not change the name of the function
-     * sort the productsList amd update the HTML displaying the list of products using displayProducts()
-     */
-    function sortProductsByReference() {
-        productsList.sort((a, b) => a.reference > b.reference ? 1 : -1);
-        displayProducts(fillTable());
-        console.log(productsList)
-    }
-
 
     function validatorName() {
         const errorM = document.getElementById("name");
-        if (!validatorLenAndVal(errorM.value.trim().length)) {
-            errorM.setCustomValidity("field less than 12.");
-            return false;
-        } else if (errorM.value.trim().includes(' ')) {
-            errorM.setCustomValidity("field must contain a single word.");
+        if (!(errorM.value.trim().length <= 12) || errorM.value.trim().includes(' ')) {
+            errorM.setCustomValidity("Please match the requested format.");
             return false;
         } else {
             errorM.setCustomValidity("");
@@ -102,7 +113,7 @@
 
     function validatorBoardSize() {
         let errorM = document.getElementById("boardSizeError");
-        if (memoryCardGame.boardSize()["mul"] % 2 === 0) {
+        if (memoryCardGame.board().mul % 2 === 0) {
             errorM.classList.add('d-none');
             document.querySelector("#Play").disabled = false;
             return true;
@@ -113,42 +124,11 @@
         }
     }
 
-    function validatorLenAndVal(currInp) {
-        return currInp <= 7;
-    }
-
-    function validatorLetterOrDigit(currInp) {
-        return /^[A-Za-z0-9]*$/.test(currInp);
-    }
-
-
-    /** you need to implement this function - do not change the name of the function
-     * @param listOfErrors an array of strings containing the error messages
-     * @returns {string|string|*} the HTML code to display the errors
-     */
-    /*    function convertErrorsToHtml() {
-            let convertList = ``
-            for (let i = 2; i <= 10; ++i)
-                convertList += `<option value=${i}>${i}</option>`;
-
-            return convertList;
-        }*/
-
-
-// you may move but not modify the code below this line
-
-    /**
-     * This function updates the HTML displaying the list of products.
-     * @param html
-     */
-    const displayProducts = (html) => {
+    const displayElems = (html) => {
         document.getElementById("tableScore").innerHTML = html;
     }
-    const displayProduct = (html) => {
-        document.getElementById("gameTableImg").innerHTML = html;
-    }
 
-    function fillTable() {
+    function fillRankedTable() {
         let tableProd = `<table class="table">
   <thead>
     <tr>
@@ -158,7 +138,7 @@
     </tr>
   </thead>
 <tbody>`
-        playersList.forEach((player, index) => {
+        rankedListArr.forEach((player, index) => {
             tableProd += ` <tr>
      <td>${index + 1}</td>
      <td>${player.key}</td>
@@ -171,20 +151,19 @@
         return tableProd;
     }
 
-    const creatGameTable = () => {
+    const createGameTable = () => {
         let tableProd = document.createElement("table");
         tableProd.classList.add("mx-auto")
         let id = 0;
-        for (let i = 0; i < memoryCardGame.boardSize()["row"]; ++i) {
+        for (let i = 0; i < memoryCardGame.board()["row"]; ++i) {
             const row = document.createElement("tr")
-            for (let j = 0; j < memoryCardGame.boardSize()["col"]; ++j) {
+            for (let j = 0; j < memoryCardGame.board()["col"]; ++j) {
                 const col = document.createElement("td")
                 const img = document.createElement("img")
                 img.src = "./images/card.jpg"
                 img.id = id++
-                img.addEventListener('click', () => {
-                })
-                //img.classList.add("img-fluid")
+                img.classList.add("img-fluid")
+                img.addEventListener('click', flipCardByClick)
                 col.appendChild(img);
                 row.appendChild(col);
             }
@@ -193,25 +172,74 @@
         document.getElementById("gameTableImg").appendChild(tableProd)
     }
 
+    const flipCardByClick = (elm) => {
+
+        if (memoryCardGame.board().flippedCard.length < 2) {
+            elm.target.src = `./images/${memoryCardGame.board().rand[elm.target.id]}`
+            elm.target.removeEventListener('click', flipCardByClick)
+            memoryCardGame.board().flippedCard.push(elm.target)
+            gamePlayData.clicks()
+        }
+        if ((memoryCardGame.board().flippedCard.length === 2)) {
+            if (memoryCardGame.board().flippedCard[0].src === memoryCardGame.board().flippedCard[1].src) {
+                memoryCardGame.setFlip()
+                gamePlayData.pairedFlipped();
+            } else if (elm.target.src.includes(memoryCardGame.board().flippedCard[0].src)
+                || elm.target.src.includes(memoryCardGame.board().flippedCard[1].src)) {
+                setTimeout(() => {
+                    memoryCardGame.board().flippedCard.forEach((card) => {
+                        card.src = `./images/card.jpg`;
+                        card.addEventListener('click', flipCardByClick)
+                    })
+                    memoryCardGame.setFlip()
+                }, document.getElementById("timer").value * 1000)
+            }
+        }
+        updateRankedList();
+    }
+
     const playGame = () => {
         if (validatorName() && validatorBoardSize()) {
-            getPlayerName();
+            gamePlayData.initPlayer()
             document.getElementById("formPage").classList.add('d-none')
             document.getElementById("gameBoard").classList.remove('d-none');
-            displayProducts(fillTable());
-            creatGameTable()
+            createGameTable()
             memoryCardGame.setRandImg(shuffle(pickRandom(gameImg)))
-            //console.log(shuffle(memoryCardGame.boardSize()["rand"]))
-            playing = true;
+        }
+    }
+        const calculateScore = () => {
+            return memoryCardGame.board().mul * 100 +
+                (2 / document.getElementById("timer").value) -
+                gamePlayData.getPlayers().clickCounter
+        }
+
+    const updateRankedList = () => {
+        if (gamePlayData.getPlayers().pairedCounter === memoryCardGame.board().mul) {
+            let exists = false
+            rankedListArr.forEach((compName) => {
+                if (compName.key.toLowerCase() === gamePlayData.getPlayers().name.toLowerCase()) {
+                    if (compName.value < calculateScore())
+                        compName.value = calculateScore();
+                    exists = true
+                }
+            })
+
+            if (!exists) {
+                rankedListArr.push({key: gamePlayData.getPlayers().name, value: calculateScore()})
+                rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
+                if (rankedListArr.length > 3)
+                    rankedListArr.pop()
+            }
+            endScreen();
         }
     }
 
-    const getPlayerName = () => {
-        let name = document.getElementById("name").value.trim().toLowerCase()
-        for (let k of playersList)
-            if (k.key === name)
-                return;
-        playersList.push({key: name, value: 0})
+    const endScreen = () => {
+        displayElems(fillRankedTable());
+        document.getElementById("gameTableImg").innerHTML =
+            ` <div class = "p-2 mb-3 bg-primary rounded-3">                
+                            <h1 class = "text-center display-5 fw-bold"> your score is : ${calculateScore()} </h1>
+                    </div>` + fillRankedTable();
     }
 
     /**
@@ -219,68 +247,26 @@
      */
     document.addEventListener("DOMContentLoaded", () => {
 
-        document.getElementById("messageForm").addEventListener("keyup", (elm) => {
+        document.getElementById("messageForm").addEventListener("keyup", () => {
             memoryCardGame.init()
             validatorName()
         })
 
-        document.getElementById("messageForm").addEventListener("click", (elm) => {
+        document.getElementById("messageForm").addEventListener("click", () => {
             memoryCardGame.init()
             validatorBoardSize();
-        })
-        //let fliped = []
-        document.getElementById("gameTableImg").addEventListener("click", (elm) => {
-            console.log(memoryCardGame.boardSize()["flippedCard"] + "   11111111111")
-            if ((memoryCardGame.boardSize()["flippedCard"].length < 2) && elm.target.src.includes(`/images/card.jpg`)) {//&& elm.target.src.includes(`/images/card.jpg`)
-                elm.target.src = `./images/${memoryCardGame.boardSize()["rand"][elm.target.id]}`
-                memoryCardGame.boardSize()["flippedCard"].push(elm.target)
-                console.log(memoryCardGame.boardSize()["flippedCard"] + "   22222222222")
-            }
-            if (memoryCardGame.boardSize()["flippedCard"].length === 2 && !elm.target.src.includes(`/images/card.jpg`)) {
-                if (memoryCardGame.boardSize()["flippedCard"][0].src === memoryCardGame.boardSize()["flippedCard"][1].src) {
-                    memoryCardGame.setFlip()
-                    console.log(memoryCardGame.boardSize()["flippedCard"] + "   3333333333")
-                } else {
-                    setTimeout(() => {
-                        console.log(memoryCardGame.boardSize()["flippedCard"] + "hhhhhhhhhh")
-                        memoryCardGame.boardSize()["flippedCard"][0].src = `./images/card.jpg`
-                        memoryCardGame.boardSize()["flippedCard"][1].src = `./images/card.jpg`
-                        memoryCardGame.setFlip()
-                        console.log(memoryCardGame.boardSize()["flippedCard"] + "   4444444444444444")
-
-                    }, 2000)
-                }
-            }
-            console.log(memoryCardGame.boardSize()["flippedCard"] + "   5555555555555")
-
         })
 
         document.getElementById("messageForm").addEventListener("submit", (elm) => {
             elm.preventDefault();
             playGame()
         })
-        document.getElementById("Back").addEventListener("click", (elm) => {
+
+        document.getElementById("Back").addEventListener("click", () => {
             document.getElementById("formPage").classList.remove('d-none')
             document.getElementById("gameBoard").classList.add('d-none');
             document.getElementById("gameTableImg").innerHTML = "";
         })
-
-        /*       // we validate the product:
-               if (validateProduct(player)) {
-                   // if the product is valid, we add it to the list of products:
-                   document.getElementById("errorMessages").innerHTML = "Product is saved!";
-                   // add the product to the list of products and update the HTML table
-                   addProduct(player);
-                   displayProducts(fillTable());
-               } else
-                   // if the product is not valid, we display the errors:
-                   document.getElementById("errorMessages").innerHTML = convertErrorsToHtml(errorMessages);
-               //});*/
-        //displayProduct(convertErrorsToHtml());
-        // the sort button handler:
-        /*    document.getElementById("sortByReference").addEventListener("click", (event) => {
-                sortProductsByReference();
-            })*/
 
     });
 })();
