@@ -76,6 +76,7 @@
         }
     }();
 
+    // Generic function to print options
     function convertOptionsToHtml() {
         let convertList = ``
         for (let i = 2; i <= 5; ++i){
@@ -142,7 +143,7 @@
     }
 
     function fillRankedTable() {
-        let tableProd = `<table class = "table">
+        let tableProd = `<table class>
   <thead>
     <tr>
       <th scope="col"> Rank </th>
@@ -185,8 +186,8 @@
         document.getElementById("gameTableImg").appendChild(tableProd)
     }
 
+    // Available scenarios for a click
     const flipCardByClick = (elm) => {
-
         if (memoryCardGame.board().flippedCard.length < 2) {
             elm.target.src = `./images/${memoryCardGame.board().rand[elm.target.id]}`
             elm.target.removeEventListener('click', flipCardByClick)
@@ -211,6 +212,7 @@
         updateRankedList();
     }
 
+    // Switch display from form to the board game when it's set and randomized
     const playGame = () => {
         if (validatorName() && validatorBoardSize()) {
             gamePlayData.initPlayer()
