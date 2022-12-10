@@ -21,94 +21,94 @@
 
     <div id="formPage">
         <form id="messageForm" name="myForm">
+            <div class="row">
+                <div class="col-12 col-md-6 col-xl-6">
+                    <p><label for="name" class="form-label"> Your Name : </label>
+                        <input type="text" class="form-control name" id="name"
+                               placeholder="Enter your name including letters and digits only" required>
+                    </p>
+                </div>
+            </div>
+            <p>
+                <input type="submit" class="btn btn-outline-primary btn-lg me-2" value="Play" id="Play">
+                <button class="btn btn-outline-secondary btn-lg  me-2" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#Settings" aria-expanded="false" aria-controls="Settings">
+                    Settings
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"> High Scores
+                </button>
+            </p>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="modalRanked"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalRanked"> Leaderboard </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="tableScore">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="collapse" id="Settings">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-xl-6">
-                        <p><label for="name" class="form-label"> Your Name : </label>
-                            <input type="text" class="form-control name" id="name"
-                                   placeholder="Enter your name including letters and digits only" required>
-                        </p>
-                    </div>
-                </div>
-                <p>
-                    <input type="submit" class="btn btn-outline-primary btn-lg me-2" value="Play" id="Play">
-                    <button class="btn btn-outline-secondary btn-lg  me-2" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#Settings" aria-expanded="false" aria-controls="Settings">
-                        Settings
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"> High Scores
-                    </button>
-                </p>
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="modalRanked"
-                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalRanked"> Leaderboard </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                    <div class="col-12 col-md-12 col-xl-12">
+                        <div class="row">
+
+                            <div class="col-12 col-md-6 col-xl-6">
+                                <label for="name" class="form-label"> Number of rows : </label>
+                                <select class="form-select" aria-label="Default select example" id="numberOfRows">
+
+                                </select>
                             </div>
-                            <div class="modal-body">
-                                <div id="tableScore">
-                                </div>
+
+                            <div class="col-12 col-md-6 col-xl-6">
+                                <label for="name" class="form-label"> Number of cols : </label>
+                                <select class="form-select" aria-label="Default select example" id="numberOfCol">
+
+                                </select>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> Close
-                                </button>
+
+                            <div id="boardSizeError" class="d-none">
+                                <p style="color:red;"> Number of cards (rows X columns) must be
+                                    even, please correct your choice. </p>
                             </div>
+                            <p>
+                            <div class="col-12 col-md-6 col-xl-6">
+                                <label for="name" class="form-label"> Delay (in seconds) : </label>
+                                <select class="form-select" id="timer" aria-label="Default select example">
+                                    <option value="0.5">0.5</option>
+                                    <option value="1.0">1</option>
+                                    <option value="1.5" selected>1.5</option>
+                                    <option value="2.0">2</option>
+                                </select>
+                            </div>
+                            </p>
                         </div>
                     </div>
                 </div>
-
-
-                <div class="collapse" id="Settings">
-                    <div class="row">
-                        <div class="col-12 col-md-12 col-xl-12">
-                            <div class="row">
-
-                                <div class="col-12 col-md-6 col-xl-6">
-                                    <label for="name" class="form-label"> Number of rows : </label>
-                                    <select class="form-select" aria-label="Default select example" id="numberOfRows">
-
-                                    </select>
-                                </div>
-
-                                <div class="col-12 col-md-6 col-xl-6">
-                                    <label for="name" class="form-label"> Number of cols : </label>
-                                    <select class="form-select" aria-label="Default select example" id="numberOfCol">
-
-                                    </select>
-                                </div>
-
-                                <div id="boardSizeError" class="d-none">
-                                    <p style="color:red;"> Number of cards (rows X columns) must be
-                                        even, please correct your choice. </p>
-                                </div>
-                                <p>
-                                <div class="col-12 col-md-6 col-xl-6">
-                                    <label for="name" class="form-label"> Delay (in seconds) : </label>
-                                    <select class="form-select" id="timer" aria-label="Default select example">
-                                        <option value="0.5">0.5</option>
-                                        <option value="1">1</option>
-                                        <option value="1.5" selected>1.5</option>
-                                        <option value="2">2</option>
-                                    </select>
-                                </div>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
         </form>
     </div>
     <div id="gameBoard" class="d-none">
-        <div id="numberOfClicks" ></div>
+        <div id="numberOfClicks"></div>
         <div id="gameTableImg">
 
         </div>
         <br>
-        <button type="button" class="btn btn-danger btn-lg me-2" id="Back"> Back</button>
+        <button type="button" class="btn btn-danger btn-lg me-2" id="Back"> Back </button>
     </div>
 </div>
 

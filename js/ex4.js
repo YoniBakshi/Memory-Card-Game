@@ -8,10 +8,10 @@
     let rankedListArr = []
 
     const gamePlayData = function () {
-        let clickCounter, pairedCounter, name;
+        let clickCounter, pairedCounter, name, currRank;
 
         function initPlayerData() {
-            clickCounter = pairedCounter = 0;
+            clickCounter = pairedCounter = currRank = 0;
             name = document.getElementById("name").value.trim();
         }
 
@@ -20,7 +20,8 @@
             return {
                 "name": name,
                 "clickCounter": clickCounter,
-                "pairedCounter": pairedCounter
+                "pairedCounter": pairedCounter,
+                "currRank" : currRank
             }
         }
 
@@ -102,7 +103,7 @@
     }
 
     // Shuffle the order of cards board game
-    const shuffle = (array) => {
+    const shuffleBoard = (array) => {
         const clonedArray = [...array]
 
         for (let i = clonedArray.length - 1; i > 0; --i) {
@@ -193,7 +194,7 @@
             elm.target.removeEventListener('click', flipCardByClick)
             memoryCardGame.board().flippedCard.push(elm.target)
             gamePlayData.clicks()
-            document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold">number of clicks: ${gamePlayData.getPlayers().clickCounter}</p>`
+            document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold"> Number of clicks : ${gamePlayData.getPlayers().clickCounter}</p>`
         }
         if ((memoryCardGame.board().flippedCard.length === 2)) {
             if (memoryCardGame.board().flippedCard[0].src === memoryCardGame.board().flippedCard[1].src) {
@@ -219,9 +220,10 @@
             gamePlayData.initPlayer()
             document.getElementById("formPage").classList.add('d-none');
             document.getElementById("gameBoard").classList.remove('d-none');
-            document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold">number of clicks: ${gamePlayData.getPlayers().clickCounter}</p>`
+            document.getElementById("numberOfClicks").classList.remove('d-none');
+            document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold"> Number of clicks : ${gamePlayData.getPlayers().clickCounter}</p>`
             createGameTable()
-            memoryCardGame.setRandImg(shuffle(randomizeCards(gameImg)))
+            memoryCardGame.setRandImg(shuffleBoard(randomizeCards(gameImg)))
         }
     }
 
@@ -231,33 +233,48 @@
             gamePlayData.getPlayers().clickCounter).toFixed(3);
     }
 
+    // Check if current entered name already exist or not in leadboard, pop last one so it keeps only the 3 best scores
     const updateRankedList = () => {
         if (gamePlayData.getPlayers().pairedCounter === memoryCardGame.board().mul) {
             let exists = false
             rankedListArr.forEach((compName) => {
+                let counter = 1;
                 if (compName.key.toLowerCase() === gamePlayData.getPlayers().name.toLowerCase()) {
-                    if (compName.value < calculateScore())
+                    if (compName.value < calculateScore()){
                         compName.value = calculateScore();
+                        gamePlayData.getPlayers().currRank = counter;
+                        console.log(gamePlayData.getPlayers().currRank);
+                    }
                     exists = true
                 }
             })
 
-            if (!exists) {
+            if (!exists)
                 rankedListArr.push({key: gamePlayData.getPlayers().name, value: calculateScore()})
-                rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
-                if (rankedListArr.length > 3)
-                    rankedListArr.pop()
-            }
+            rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
+            if (rankedListArr.length > 3)
+                rankedListArr.pop()
+
+            // Set function maybe ?
+/*            rankedListArr.forEach((compName) => {
+                let counter = 1;
+                if (compName.key.toLowerCase() === gamePlayData.getPlayers().name.toLowerCase())
+                    gamePlayData.getPlayers().currRank = counter;
+            })
+            gamePlayData.getPlayers().currRank = 0;*/
+
             endScreen();
         }
     }
 
     const endScreen = () => {
+        document.getElementById("numberOfClicks").classList.add('d-none');
         convertTableToHtml(fillRankedTable());
         document.getElementById("gameTableImg").innerHTML =
-            ` <div class = "p-2 mb-3 bg-primary rounded-3">                
-                            <h1 class = "text-center display-5 fw-bold"> your score is : ${calculateScore()} </h1>
+            ` <div class = "p-2 mb-3 bg-info rounded-3">                
+                            <h1 class = "text-center display-5 fw-bold"> Your score is : ${calculateScore()} </h1>
                     </div>` + fillRankedTable();
+        //  <h1 class = "text-center display-5 fw-bold"> Congrtz! You've reached to : ${gamePlayData.getPlayers().currRank} </h1>
     }
 
     /**
@@ -287,6 +304,5 @@
             document.getElementById("gameTableImg").innerHTML = "";
             document.getElementById("messageForm").reset();
         })
-
     });
 })();
