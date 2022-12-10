@@ -143,7 +143,7 @@
     }
 
     function fillRankedTable() {
-        let tableProd = `<table class>
+        let tableProd = `<table class="table">
   <thead>
     <tr>
       <th scope="col"> Rank </th>
@@ -193,6 +193,7 @@
             elm.target.removeEventListener('click', flipCardByClick)
             memoryCardGame.board().flippedCard.push(elm.target)
             gamePlayData.clicks()
+            document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold">number of clicks: ${gamePlayData.getPlayers().clickCounter}</p>`
         }
         if ((memoryCardGame.board().flippedCard.length === 2)) {
             if (memoryCardGame.board().flippedCard[0].src === memoryCardGame.board().flippedCard[1].src) {
@@ -218,6 +219,7 @@
             gamePlayData.initPlayer()
             document.getElementById("formPage").classList.add('d-none');
             document.getElementById("gameBoard").classList.remove('d-none');
+            document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold">number of clicks: ${gamePlayData.getPlayers().clickCounter}</p>`
             createGameTable()
             memoryCardGame.setRandImg(shuffle(randomizeCards(gameImg)))
         }
