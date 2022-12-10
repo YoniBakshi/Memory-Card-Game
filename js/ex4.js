@@ -143,7 +143,7 @@
     }
 
     function fillRankedTable() {
-        let tableProd = `<table class>
+        let tableProd = `<table class="table">
   <thead>
     <tr>
       <th scope="col"> Rank </th>
