@@ -16,6 +16,6 @@ Notes :
     - Based on these three parameters : we multiply the board's size by 100, adding half of the delay of flipped cards and decrease by the quantity of clicks.
     - Score will be shown with 3 digits after the decimal point.
 
-- Randomize cards formula :
+- Randomize picking cards formula :
 
 - Shuffle the order of board's card :

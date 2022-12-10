@@ -42,7 +42,7 @@
     }();
 
     const memoryCardGame = function () {
-        let boardCol, boardRow, randomImgArr, flippedArr
+        let boardCol, boardRow, randomImgArr, flippedArr;
 
         function initBoard() {
             boardCol = document.getElementById("numberOfCol").value;
