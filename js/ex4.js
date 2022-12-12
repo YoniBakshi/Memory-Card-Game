@@ -119,9 +119,10 @@
         function convertOptionsToHtml() {
             let convertList = ``
             for (let i = 2; i <= 5; ++i) {
-                convertList += `<option value=${i}>${i}</option>`;
                 if (i === 4)
                     convertList += `<option value=${i} selected>${i}</option>`;
+                else
+                    convertList += `<option value=${i}>${i}</option>`;
             }
             document.getElementById("numberOfRows").innerHTML = convertList
             document.getElementById("numberOfCol").innerHTML = convertList
@@ -138,10 +139,10 @@
 
             for (let i = 0; i < memoryCardGame.board().mul / 2; ++i) {
                 const randomizeI = Math.floor(Math.random() * clonedArray.length);  // Get random card
-                randomCards.push(clonedArray[randomizeI]);                // Add random card to new array randomized
-                clonedArray.splice(randomizeI, 1);              // Delete chosen random card from cards array
+                randomCards.push(clonedArray[randomizeI]);  // Add random card to new array randomized
+                clonedArray.splice(randomizeI, 1); // Delete chosen random card from cards array
             }
-            return randomCards.concat(randomCards);                                    // Return random array  * 2
+            return randomCards.concat(randomCards); // Return random array  * 2
         }
 
         /**
@@ -294,9 +295,9 @@
         }
 
         const calculateScore = () => {
-            return (memoryCardGame.board().mul * 100 +
+            return Math.floor(memoryCardGame.board().mul * 100 +
                 (2 / document.getElementById("timer").value) -
-                gamePlayData.getPlayers().clickCounter).toFixed(3);
+                gamePlayData.getPlayers().clickCounter);
         }
 
         /**
@@ -318,9 +319,19 @@
 
                 if (!exists)
                     rankedListArr.push({key: gamePlayData.getPlayers().name, value: calculateScore()})
+                rankedListArr.forEach((v) =>{
+                    console.log(v.value)
+                })
+                console.log("shgddgfadgd")
+
                 rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
                 if (rankedListArr.length > 3)
                     rankedListArr.pop()
+                rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
+
+                rankedListArr.forEach((v) =>{
+                    console.log(v.value)
+                })
                 endScreen();
             }
         }
