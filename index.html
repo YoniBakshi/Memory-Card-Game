@@ -6,9 +6,11 @@
     <title> Ex04 </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <style>body{background-image: url("images/BackgroudCardGame.jpg")}</style>
+    <style>body {
+        background-image: url("images/BackgroudCardGame.jpg")
+    }</style>
 </head>
-<body >
+<body>
 
 <div class="container">
     <div class="p-2 mb-3 bg-light rounded-5">
@@ -24,8 +26,8 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-xl-6">
                     <label for="name" class="form-label fs-4 fw-bold"> Your Name : </label>
-                        <input type="text" class="form-control name" id="name"
-                               placeholder="Enter your name including letters and digits only" required>
+                    <input type="text" class="form-control name" id="name"
+                           placeholder="Enter your name including letters and digits only" required>
                     <br>
                 </div>
             </div>
@@ -36,7 +38,8 @@
                     Settings
                 </button>
                 <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"> High Scores </button>
+                        data-bs-target="#exampleModal"> High Scores
+                </button>
             </p>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="modalRanked"
@@ -87,10 +90,10 @@
                             <div class="col-12 col-md-6 col-xl-6">
                                 <label for="name" class="form-label"> Delay (in seconds) : </label>
                                 <select class="form-select" id="timer" aria-label="Default select example">
-                                    <option value="0.5">0.5</option>
-                                    <option value="1">1</option>
-                                    <option value="1.5" selected>1.5</option>
-                                    <option value="2">2</option>
+                                    <option value="0.5"> 0.5</option>
+                                    <option value="1"> 1.0</option>
+                                    <option value="1.5" selected> 1.5</option>
+                                    <option value="2"> 2.0</option>
                                 </select>
 
                             </div>
@@ -106,7 +109,7 @@
 
         </div>
         <br>
-        <button type="button" class="btn btn-danger btn-lg me-2" id="Back"> Back</button>
+        <button type="button" class="btn btn-danger btn-lg me-2" id="Back"> Abandon</button>
     </div>
 </div>
 

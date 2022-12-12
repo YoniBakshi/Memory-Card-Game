@@ -7,7 +7,26 @@ Yehonatan Bakshi , ID : 308077668 , Email : yehonatanba@edu.hac.ac.il
 
 Hila Saadon , ID : 208405217 , Email : hilasaa@edu.hac.ac.il
 
+README :
+- A classic memory card game - limited edition with Poro's images. The goal is to find each card it's pair, flip 2 cards at the same time by clicking it.
+- Main page will contain a field name to fill, and 3 buttons : Play, Settings, High scores.
+- At first, the player must enter a name which will be validated so it contains letters a-z, A-Z, 0-9 ONLY.
+  - No spaces are allowed at all.
+  - Can contain up to 12 letters/digits.
+- Setting : The player can set a preference to his game :
+  - Set the quantity of cards in a row and column, but the size of board must be an even number of cards. (rows * cols) 
+  - Set the delay of cards when it's flipping.
+  - Rows & Columns option range is 2-5 (Default of both is 4) , Delay options : 0.5, 1.0, 1.5, 2.0
+- High Score : Leaderboard which contains the 3 best players with their best scores. Being updated every game.
+- When the player finish the game, the score will be printed and the updated leaderboard with player's rank.
+
+
 Notes :
+- A player who didn't finish the game won't be able to enter the leaderboard.
+- Letters of entered name will be checked as lowercase - if name is already in the leaderboard - score will be updated.
+- All fields must be valid to start a game.
+
+
 - Score's formula :
     - using 3 values : 
       1. Board's size.
