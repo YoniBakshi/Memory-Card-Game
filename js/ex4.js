@@ -319,19 +319,9 @@
 
                 if (!exists)
                     rankedListArr.push({key: gamePlayData.getPlayers().name, value: calculateScore()})
-                rankedListArr.forEach((v) =>{
-                    console.log(v.value)
-                })
-                console.log("shgddgfadgd")
-
                 rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
                 if (rankedListArr.length > 3)
                     rankedListArr.pop()
-                rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
-
-                rankedListArr.forEach((v) =>{
-                    console.log(v.value)
-                })
                 endScreen();
             }
         }
