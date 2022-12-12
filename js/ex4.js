@@ -99,13 +99,6 @@
             }
 
             /**
-             * getPlayers = key to call a function which contains 3 values of current player. (name, clicks & paired counters)
-             * initPlayer = key to call function which initialize player's data in each game.
-             * clicks =  key to call a function which update the quantity of clicks + 1
-             * pairedFlipped = key to call a function which update the quantity of cards that played paired + 2
-             */
-
-            /**
              * board = key to call a function which contains 3 values of current player.
              * init = key to call function which initialize board's data in each game.
              * setRandImg = key to call a function to set the randomized card's pictures
