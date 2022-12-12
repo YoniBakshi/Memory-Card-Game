@@ -8,10 +8,10 @@
         let rankedListArr = []
 
         const gamePlayData = function () {
-            let clickCounter, pairedCounter, name, currRank;
+            let clickCounter, pairedCounter, name;
 
             function initPlayerData() {
-                clickCounter = pairedCounter = currRank = 0;
+                clickCounter = pairedCounter = 0;
                 name = document.getElementById("name").value.trim();
             }
 
@@ -21,7 +21,6 @@
                     "name": name,
                     "clickCounter": clickCounter,
                     "pairedCounter": pairedCounter,
-                    "currRank": currRank
                 }
             }
 
@@ -89,7 +88,7 @@
             document.getElementById("numberOfCol").innerHTML = convertList
         }
 
-        // Pick a random pictures from "gameImg" for the current game cards
+        // Pick a random pictures from the inventory (array "gameImg") for current cards game
         const randomizeCards = (array) => {
             const clonedArray = [...array]
             const randomCards = [];
@@ -166,11 +165,12 @@
             return tableProd;
         }
 
+        // Set the cards on the board and attach needed values
         const createGameTable = () => {
             let tableProd = document.createElement("table");
             tableProd.classList.add("mx-auto")
             let id = 0;
-            for (let i = 0; i < memoryCardGame.board()["row"]; ++i) {
+            for (let i = 0; i < memoryCardGame.board().row; ++i) {
                 const row = document.createElement("tr")
                 for (let j = 0; j < memoryCardGame.board()["col"]; ++j) {
                     const col = document.createElement("td")
@@ -189,13 +189,18 @@
 
         // Available scenarios for a click
         const flipCardByClick = (elm) => {
+            // If less than 2 cards are flipped at the moment
             if (memoryCardGame.board().flippedCard.length < 2) {
                 elm.target.src = `./images/${memoryCardGame.board().rand[elm.target.id]}`
                 elm.target.removeEventListener('click', flipCardByClick)
                 memoryCardGame.board().flippedCard.push(elm.target)
                 gamePlayData.clicks()
-                document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold"> Number of clicks : ${gamePlayData.getPlayers().clickCounter}</p>`
+                document.getElementById("numberOfClicks").innerHTML = `
+                    <p class="text-center fs-5 fw-bold">
+                    Number of clicks : ${gamePlayData.getPlayers().clickCounter}</p>
+                    `
             }
+            // If 2 cards are flipped at the moment so check if it's a pair and set according to it
             if ((memoryCardGame.board().flippedCard.length === 2)) {
                 if (memoryCardGame.board().flippedCard[0].src === memoryCardGame.board().flippedCard[1].src) {
                     memoryCardGame.setFlip()
@@ -221,7 +226,10 @@
                 document.getElementById("formPage").classList.add('d-none');
                 document.getElementById("gameBoard").classList.remove('d-none');
                 document.getElementById("numberOfClicks").classList.remove('d-none');
-                document.getElementById("numberOfClicks").innerHTML = `<p class="text-center fs-5 fw-bold"> Number of clicks : ${gamePlayData.getPlayers().clickCounter}</p>`
+                document.getElementById("numberOfClicks").innerHTML = `
+                    <p class="text-center fs-5 fw-bold"> 
+                    Number of clicks : ${gamePlayData.getPlayers().clickCounter} </p>`
+
                 createGameTable()
                 memoryCardGame.setRandImg(shuffleBoard(randomizeCards(gameImg)))
             }
@@ -238,13 +246,10 @@
             if (gamePlayData.getPlayers().pairedCounter === memoryCardGame.board().mul) {
                 let exists = false
                 rankedListArr.forEach((compName) => {
-                    let counter = 1;
                     if (compName.key.toLowerCase() === gamePlayData.getPlayers().name.toLowerCase()) {
                         if (compName.value < calculateScore()) {
                             compName.value = calculateScore();
                             compName.key = gamePlayData.getPlayers().name
-                            gamePlayData.getPlayers().currRank = counter;
-                            console.log(gamePlayData.getPlayers().currRank);
                         }
                         exists = true
                     }
@@ -255,43 +260,32 @@
                 rankedListArr.sort((a, b) => a.value < b.value ? 1 : -1);
                 if (rankedListArr.length > 3)
                     rankedListArr.pop()
-
-
-                // Set function maybe ?
-                /*            rankedListArr.forEach((compName) => {
-                                let counter = 1;
-                                if (compName.key.toLowerCase() === gamePlayData.getPlayers().name.toLowerCase())
-                                    gamePlayData.getPlayers().currRank = counter;
-                            })
-                            gamePlayData.getPlayers().currRank = 0;*/
-
                 endScreen();
             }
         }
 
         const endScreen = () => {
-            let arr = [`st`,`ed`,`rd`]
+            let arr = [`st`, `nd`, `rd`]
             document.getElementById("numberOfClicks").classList.add('d-none');
             convertTableToHtml(fillRankedTable());
             if (rankedListArr.find(x => x.key === gamePlayData.getPlayers().name)) {
                 let index = rankedListArr.findIndex(p => p.key === gamePlayData.getPlayers().name);
                 document.getElementById("gameTableImg").innerHTML =
                     `<div class = "p-2 mb-3 bg-info rounded-3">                
-                            <h1 class = "text-center display-5 fw-bold"> Congrtz! You've reached to : 
-                            ${index + 1}<span class="h6">${arr[index]}</span> place</h1>
+                            <h1 class = "text-center display-5 fw-bold"> Congrtz! You've reached : 
+                            ${index + 1}<sup class = "h2">${arr[index]}</sup> place </h1>
                             <p class="text-center fs-4"> Your score is : ${calculateScore()}</p>
                     </div>` + fillRankedTable();
             } else
                 document.getElementById("gameTableImg").innerHTML =
                     ` <div class = "p-2 mb-3 bg-info rounded-3">                
                             <h1 class = "text-center display-5 fw-bold"> Game Over </h1>
-                            <p class="text-center fs-4"> Your score is : ${calculateScore()} <br> maby next time</p>
+                            <p class="text-center fs-4"> Your score is : ${calculateScore()} 
+                            <br>
+                            Almost there! maybe next time </p>
                     </div>` + fillRankedTable();
         }
 
-        /**
-         * upon loading the page, we bind handlers to the form and the button
-         */
         document.addEventListener("DOMContentLoaded", () => {
             convertOptionsToHtml();
 
