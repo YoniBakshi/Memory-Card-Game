@@ -7,6 +7,10 @@
 
         let rankedListArr = []
 
+        /**
+         *
+         * @type {{initPlayer: initPlayerData, clicks: setClicks, pairedFlipped: setPairsCounter, getPlayers: (function(): {clickCounter: *, name: *, pairedCounter: *})}}
+         */
         const gamePlayData = function () {
             let clickCounter, pairedCounter, name;
 
@@ -20,7 +24,7 @@
                 return {
                     "name": name,
                     "clickCounter": clickCounter,
-                    "pairedCounter": pairedCounter,
+                    "pairedCounter": pairedCounter
                 }
             }
 
