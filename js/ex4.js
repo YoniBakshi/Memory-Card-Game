@@ -138,10 +138,10 @@
 
             for (let i = 0; i < memoryCardGame.board().mul / 2; ++i) {
                 const randomizeI = Math.floor(Math.random() * clonedArray.length);  // Get random card
-                randomCards.push(clonedArray[randomizeI]);  // Add random card to new array randomized
-                clonedArray.splice(randomizeI, 1); // Delete chosen random card from cards array
+                randomCards.push(clonedArray[randomizeI]);                // Add random card to new array randomized
+                clonedArray.splice(randomizeI, 1);              // Delete chosen random card from cards array
             }
-            return randomCards.concat(randomCards); // Return random array  * 2
+            return randomCards.concat(randomCards);                                    // Return random array  * 2
         }
 
         /**

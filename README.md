@@ -18,7 +18,7 @@ README :
   - Set the delay of cards when it's flipping.
   - Rows & Columns option range is 2-5 (Default of both is 4) , Delay options : 0.5, 1.0, 1.5, 2.0
 - High Score : Leaderboard which contains the 3 best players with their best scores. Being updated every game.
-- When the player finish the game, the score will be printed and the updated leaderboard with player's rank.
+- When the player finish the game - his calculated score will be printed and the updated leaderboard with player's rank or a nice try message.
 
 
 Notes :
