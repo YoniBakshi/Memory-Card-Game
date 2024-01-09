@@ -1,10 +1,5 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=9537662&assignment_repo_type=AssignmentRepo)
 
-# Authors:
-Yehonatan Bakshi
-
-Hila Saadon
-
 README :
 - A classic memory card game - limited edition with Poro's images. The goal is to find each card it's pair, flip 2 cards at the same time by clicking it.
 - Main page will contain a field name to fill, and 3 buttons : Play, Settings, High scores.
@@ -45,3 +40,8 @@ Notes :
   - Receive the chosen random pictures for the cards, Get a index (using limit Math.floor),
   - Switch places between randomized index and original index.
   - In the end, function returns the accomplished random board game array.
+ 
+Authors:
+Yehonatan Bakshi
+
+Hila Saadon
